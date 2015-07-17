@@ -1,0 +1,60 @@
+'''
+Created on Jul 16, 2015
+
+@author: MOng
+'''
+import csv
+from Bio import Entrez
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+from Bio import SeqIO
+
+Entrez.email = "monghim.ng@gmail.com"
+
+class Epitope():
+    def __init__(self, seq, id):
+        self.seq = seq
+        self.id = id
+
+class ConservancyCheck():
+    def __init__(self, epitopeCVSFilePath, sequenceRecordList):
+        "the id is not gi, rather the epitope id"
+        self.sequenceRecordList = sequenceRecordList
+        self.epitopeList = list()
+        with open(epitopeCVSFilePath, 'rb') as csvfile:
+            reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+            reader.next()#useless header line
+            reader.next()
+            for row in reader:
+                id = row[0].split(",")[0].split('"')[1]
+                seqString = row[1].split(",")[1].split('"')[1]
+                seq = Seq(seqString)
+                self.epitopeList.append(Epitope(seq=seq, id=id))
+                
+    def checkConservancy(self):
+        for seqRecord in self.sequenceRecordList:
+            seq = seqRecord.seq
+            print seqRecord.name, "has ebola epitope of:"
+            for epitope in self.epitopeList:
+                if epitope.seq in seq:
+                    print epitope.id
+
+
+
+#get sequence list
+print "conservancy"
+sequenceRecordList = [];
+db = "protein"
+handleSearch = Entrez.esearch(db=db, term="ebola[ORGN] AND nucleoprotein", usehistory="Y")
+resultSearch = Entrez.read(handleSearch)
+query_key = resultSearch["QueryKey"]
+webenv = resultSearch["WebEnv"]
+print resultSearch["Count"]
+handleFetch = Entrez.efetch(db=db, rettype="fasta", retmode="text", query_key=query_key, webenv=webenv)
+SeqRecordListGenerator = SeqIO.parse(handleFetch, "fasta")
+SeqRecordList = list(SeqRecordListGenerator)
+
+
+csvfile = "/home/mint/Desktop/epitope_table_export_1437093161.csv"
+checker = ConservancyCheck(csvfile, SeqRecordList)
+checker.checkConservancy()
