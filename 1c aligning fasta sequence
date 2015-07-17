@@ -1,0 +1,62 @@
+'''
+Created on Jul 15, 2015
+
+@author: MOng
+'''
+from Bio import Entrez
+from Bio import AlignIO
+from Bio import SeqIO
+import Bio.Align.Applications
+from Bio.Align.Applications import ClustalwCommandline
+from Bio import SeqIO
+from Bio.SeqRecord import SeqRecord
+from Bio.Seq import Seq
+import os
+Entrez.email = "monghim.ng@gmail.com"
+
+def changeExtension(filePath, newExtension):
+    l = filePath.split(".")
+    newPath = l[0] + "." + newExtension
+    return newPath
+
+#input from Database
+#search
+handleSearch = Entrez.esearch(db="protein", term="ebola[ORGN] AND nucleoprotein", usehistory="y")
+recordListSearch = Entrez.read(handleSearch)
+query_key = recordListSearch["QueryKey"]
+webenv = recordListSearch["WebEnv"]
+print recordListSearch["Count"]
+#efetch
+handleFetch = Entrez.efetch(db="protein", rettype="fasta", retmode="text", query_key=query_key, webenv=webenv)
+SeqListGenerator = SeqIO.parse(handleFetch, "fasta")
+SeqList = list(SeqListGenerator)
+print SeqList
+#first input a list of seqRecord to a temporary file for command line
+infile = "SeqRecord.fasta"
+SeqIO.write(SeqList,infile, "fasta")
+print "created", SeqList
+#align it using clustalw
+clustalExe = r"clustalw"
+cline = ClustalwCommandline(clustalExe, infile=infile)
+stdout, stderr = cline()
+
+#display alignment
+outfile = changeExtension(infile, "aln")
+outAlignment = AlignIO.read(outfile, "clustal")
+print outAlignment
+
+#close handles, and delete the temporary files
+handleFetch.close()
+handleSearch.close()
+os.remove(infile)
+os.remove(outfile)
+os.remove(changeExtension(infile, "dnd"))
+
+#old code = did not know that you can directly use seqio
+# SeqList = [];
+# infile = "SeqRecord.fasta"
+# for recordFetch in recordListFetch:
+#     sequence = recordFetch["TSeq_sequence"]
+#     id = recordFetch["TSeq_gi"]
+#     seqRecord = SeqRecord(Seq(sequence), id=id)
+#     SeqList.append(seqRecord)
