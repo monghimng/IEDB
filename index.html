@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="ISO-8859-1">
+	<title>EETT | Home</title>
+	<link rel="stylesheet" type="text/css" href="eett.css" />
+	<script type="text/javascript" src="javascriptfile.js"></script>
+</head>
+<body>
+	<h2>Ebolavirus Epitope Tracking Tool</h2><br />
+	<form id="RESHFormInput" action="../cgi-bin/EETTMain.cgi" method="post" enctype="multipart/form-data">
+	<table class="entry">
+		<tr>
+			<th colspan="2">
+				Sequence data
+			</th>
+		</tr>
+		<tr>
+			<td>
+				<p>
+					Organism:
+				</p>
+			</td>
+			<td>
+				<select name="organismname" class="organismname">
+					<option value="Ebolavirus">Ebolavirus</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p>
+					Cutoff date:<br />
+					(Enter date in YYYY/MM/DD format)
+				</p>
+			</td>
+			<td>
+					<input name="cutoffdate" type="text" value="2015/01/01" class="cutoffdate"/>
+			</td>
+		</tr>
+		<tr>
+			<th colspan="2">
+				MHC binding prediction
+			</th>
+		</tr>
+		<tr>
+			<td>
+				<p>
+					MHC class
+				</p>
+			</td>
+			<td>
+				<select name="mhcclass" id="mhcclass" class="mhcclass" onclick="first(), second()">
+					<option value="mhci">MHC I</option>
+					<option value="mhcii">MHC II</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p>
+					Alleles
+				</p>
+			</td>
+			<td>
+				<p>
+					<select multiple name="classialleles" id="classialleles" class="classialleles">
+						<option value="HLA-A*01:01">HLA-A*01:01</option>
+						<option value="HLA-A*02:01">HLA-A*02:01</option>
+						<option value="HLA-A*02:03">HLA-A*02:03</option>
+						<option value="HLA-A*02:06">HLA-A*02:06</option>
+						<option value="HLA-A*03:01">HLA-A*03:01</option>
+						<option value="HLA-A*11:01">HLA-A*11:01</option>
+						<option value="HLA-A*23:01">HLA-A*23:01</option>
+						<option value="HLA-A*24:02">HLA-A*24:02</option>
+						<option value="HLA-A*26:01">HLA-A*26:01</option>
+						<option value="HLA-A*30:01">HLA-A*30:01</option>
+						<option value="HLA-A*30:02">HLA-A*30:02</option>
+						<option value="HLA-A*31:01">HLA-A*31:01</option>
+						<option value="HLA-A*32:01">HLA-A*32:01</option>
+						<option value="HLA-A*33:01">HLA-A*33:01</option>
+						<option value="HLA-A*68:01">HLA-A*68:01</option>
+						<option value="HLA-A*68:02">HLA-A*68:02</option>
+						<option value="HLA-B*07:02">HLA-B*07:02</option>
+						<option value="HLA-B*08:01">HLA-B*08:01</option>
+						<option value="HLA-B*15:01">HLA-B*15:01</option>
+						<option value="HLA-B*35:01">HLA-B*35:01</option>
+						<option value="HLA-B*40:01">HLA-B*40:01</option>
+						<option value="HLA-B*44:02">HLA-B*44:02</option>
+						<option value="HLA-B*44:03">HLA-B*44:03</option>
+						<option value="HLA-B*51:01">HLA-B*51:01</option>
+						<option value="HLA-B*53:01">HLA-B*53:01</option>
+						<option value="HLA-B*57:01">HLA-B*57:01</option>
+						<option value="HLA-B*58:01">HLA-B*58:01</option>
+					</select>
+					<select multiple name="classiialleles" id="classiialleles" style="display: none" class="classiialleles">
+						<option value="HLA-DRB1*01:01">HLA-DRB1*01:01</option>
+						<option value="HLA-DRB1*03:01">HLA-DRB1*03:01</option>
+						<option value="HLA-DRB1*04:01">HLA-DRB1*04:01</option>
+						<option value="HLA-DRB1*04:05">HLA-DRB1*04:05</option>
+						<option value="HLA-DRB1*07:01">HLA-DRB1*07:01</option>
+						<option value="HLA-DRB1*08:02">HLA-DRB1*08:02</option>
+						<option value="HLA-DRB1*09:01">HLA-DRB1*09:01</option>
+						<option value="HLA-DRB1*11:01">HLA-DRB1*11:01</option>
+						<option value="HLA-DRB1*12:01">HLA-DRB1*12:01</option>
+						<option value="HLA-DRB1*13:02">HLA-DRB1*13:02</option>
+						<option value="HLA-DRB1*15:01">HLA-DRB1*15:01</option>
+						<option value="HLA-DRB3*01:01">HLA-DRB3*01:01</option>
+						<option value="HLA-DRB3*02:02">HLA-DRB3*02:02</option>
+						<option value="HLA-DRB4*01:01">HLA-DRB4*01:01</option>
+						<option value="HLA-DRB5*01:01">HLA-DRB5*01:01</option>
+						<option value="HLA-DQA1*05:01/DQB1*02:01">HLA-DQA1*05:01/DQB1*02:01</option>
+						<option value="HLA-DQA1*05:01/DQB1*03:01">HLA-DQA1*05:01/DQB1*03:01</option>
+						<option value="HLA-DQA1*03:01/DQB1*03:02">HLA-DQA1*03:01/DQB1*03:02</option>
+						<option value="HLA-DQA1*04:01/DQB1*04:02">HLA-DQA1*04:01/DQB1*04:02</option>
+						<option value="HLA-DQA1*01:01/DQB1*05:01">HLA-DQA1*01:01/DQB1*05:01</option>
+						<option value="HLA-DQA1*01:02/DQB1*06:02">HLA-DQA1*01:02/DQB1*06:02</option>
+						<option value="HLA-DPA1*02:01/DPB1*01:01">HLA-DPA1*02:01/DPB1*01:01</option>
+						<option value="HLA-DPA1*01:03/DPB1*02:01">HLA-DPA1*01:03/DPB1*02:01</option>
+						<option value="HLA-DPA1*01/DPB1*04:01">HLA-DPA1*01/DPB1*04:01</option>
+						<option value="HLA-DPA1*03:01/DPB1*04:02">HLA-DPA1*03:01/DPB1*04:02</option>
+						<option value="HLA-DPA1*02:01/DPB1*05:01">HLA-DPA1*02:01/DPB1*05:01</option>
+						<option value="HLA-DPA1*02:01/DPB1*14:01">HLA-DPA1*02:01/DPB1*14:01</option>
+					</select>
+				</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p>
+					Peptide lengths
+				</p>
+			</td>
+			<td>
+				<p>
+					<div name="classilength" id="classilength" class="classilength">
+						<input type="checkbox" name="classilength9" value="9" checked>9<br />
+						<input type="checkbox" name="classilength10" value="10">10<br />
+					</div>
+					<div name="classiilength" id="classiilength" style="display: none" class="classiilength">
+						<input type="checkbox" name="classiilength15" value="15" checked>15<br />
+					</div>
+				</p>
+			</td>
+		</tr>
+
+<tr><td>Choose a prediction method</td><td>
+	<select name="predictionMethod" id="id_method">
+		<option value="recommended" selected="selected">IEDB recommended</option>
+		<option value="consensus">Consensus</option>
+		<option value="netmhcpan">netMHCpan</option>
+		<option value="ann">ANN</option>
+		<option value="smmpmbec">SMMPMBEC</option>
+		<option value="smm">SMM</option>
+		<option value="comblib_sidney2008">CombLib_Sidney2008</option>
+		<option value="pickpocket">PickPocket</option>
+		<option value="netmhccons">netMHCcons</option>
+	</select>
+	</td>
+</tr>
+
+
+
+
+
+<tr>
+			<th colspan="2">
+				<input type="reset"/>
+				<input type="submit"/>
+			</th>
+		</tr>
+	</table>
+	</form>
+</body>
+</html>
+<!--Created by MOng(Mong H. Ng) on August 6, 2015-->
+<!--Also created by Doctor Sinu Paul-->
